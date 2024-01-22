@@ -112,14 +112,13 @@ app.post('/app/user/login', (req, res) => {
 });
 
 app.get('/app/users', (req, res) => {
-if (users.length === 0) {
-    return res.status(404).json({ message: 'No users found' });
-}
-
-res.status(200).json({ users });
+    if (users.length === 0) {
+        return res.status(404).json({ message: 'No users found' });
+    }
+    res.status(200).json({ users });
 });
 
-app.get('/app/profile/:email', (req, res) => {
+app.get('/app/user/profile/:email', (req, res) => {
 const { email } = req.params;
 
 const user = users.find(user => user.email === email);
@@ -131,7 +130,7 @@ if (!user) {
 res.status(200).json({ userProfile: { username: user.username, email: user.email, role: user.role } });
 });
 
-app.get('/app/usersByRole/:role', (req, res) => {
+app.get('/app/users/:role', (req, res) => {
 const { role } = req.params;
 
 const usersByRole = users.filter(user => user.role === role);
@@ -143,18 +142,28 @@ if (usersByRole.length === 0) {
 res.status(200).json({ users: usersByRole });
 });
 
-
 app.get("/app/user/influncers")
-app.get("/app/user/influncers/influencer:Id")
-app.post("/app/user/influncers/influencer:Id")
+app.get("/app/user/influncers/:influencerId")
+app.post("/app/user/influncers/:influencerId")
 app.put("/app/user/influncers/influencer:Id/profile")
-app.get("/app/user/teams/team:Id")
-app.get("/app/user/collab/collab:Id")
-app.get("/app/payment/transaction/tran:Id")
-app.post("/app/payment/influncer:Id")
-app.post("/app/payment/tran:Id")
-app.get("/app/message",(req,res)=>{});
-app.get("/app/user/:userId/message/:userId",(req,res)=>{});
-app.get("/app/user/:userId/chat-history",(req,res)=>{});
+app.get("/app/user/teams")
+app.get("/app/user/teams/:teamId")
+app.get("/app/user/team/:teamId/profile")
+app.post("/app/user/team/:teamId/profile")
+app.put("/app/user/team/:teamId/profile")
+app.post("/app/user/collab")
+app.get("/app/user/collab")
+app.get("/app/user/collab/:collabId")
+app.get("/app/payment/transaction")
+app.get("/app/payment/transaction/:tranId")
+app.post("/app/payment/:influncerId")
+app.post("/app/payment/:tranId")
+app.post("/app/message")
+app.delete("/app/message")
+app.get("/app/message");
+app.get("/app/user/:userId/message/:userId");
+app.get("/app/user/:userId/chat-history");
 app.get("/app/:influencerId/review")
 app.post("/app/:influencerId/review")
+app.patch("/app/:influencerId/review")
+app.delete("/app/:influencerId/review")

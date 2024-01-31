@@ -9,14 +9,6 @@ import { createTheme } from "@mui/material/styles";
 import { useNavigate } from 'react-router-dom';
 
 
-const customTheme = createTheme({
-palette: {
-    primary: {
-      main: "#e34f3f", // Change "main" to your desired color
-    },
-},
-});
-
 function Navbar() {
     const navigate=new useNavigate();
     return (
@@ -25,9 +17,10 @@ function Navbar() {
             <Stack spacing={3} direction="row">
             <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
                 <ButtonGroup variant="text" color='primary' size='large' aria-label="align-button-group">
-                    <Button onClick={()=>navigate('/influencers')}>HOW IT WORKS</Button>
+                    <Button onClick={()=>navigate('/guide/team')}>HOW IT WORKS</Button>
                     <Button onClick={()=>navigate('/features')}>FEATURES</Button>
-                    <Button onClick={()=>navigate('/findinfluencer')}>FIND INFLUENCERS</Button>
+                    <Button onClick={()=>navigate('/influencer')}>FIND INFLUENCERS</Button>
+                    <Button onClick={()=>navigate('/')}>Home</Button>
                 </ButtonGroup>
             </Stack>
         </div>

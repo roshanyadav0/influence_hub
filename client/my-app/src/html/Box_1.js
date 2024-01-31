@@ -11,7 +11,7 @@ function Box_1() {
     return (
     <div class="main-div-2">
         <Stack spacing={3} direction='row'>                
-                <Button variant='text' size='large' onClick={()=>navigate('/findinfluencer')}>HIRE INFLUENCERS</Button>
+                <Button variant='text' size='large' onClick={()=>navigate('/influencer')}>HIRE INFLUENCERS</Button>
                 <Button variant='text' size='large' onClick={()=>navigate('/resources')}>RESOURCES</Button>
                 <Button variant='text' size='large' onClick={()=>navigate('/about')}>ABOUT US</Button>
         </Stack>

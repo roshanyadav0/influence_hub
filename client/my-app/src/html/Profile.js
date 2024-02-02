@@ -2,10 +2,9 @@ import React from 'react'
 import '../css/Profile.css'
 import { useNavigate } from 'react-router-dom'
 import Box_1 from './Box_1';
-import { Tabs, TabList, TabPanels, Tab, TabPanel } from '@chakra-ui/react'
-
 
 function Profile() {
+    const navigate=new useNavigate();
     return (
         <div>
             <Box_1/>
@@ -23,47 +22,28 @@ function Profile() {
                         </div>
                         <div id="chat-box">
                             <h1>Chats</h1>
-                                <Tabs>
-                                    <TabList>
-                                        <Tab>One</Tab>
-                                        <Tab>Two</Tab>
-                                        <Tab>Three</Tab>
-                                    </TabList>
-
-                                    <TabPanels>
-                                        <TabPanel>
-                                        <p>one!</p>
-                                        </TabPanel>
-                                        <TabPanel>
-                                        <p>two!</p>
-                                        </TabPanel>
-                                        <TabPanel>
-                                        <p>three!</p>
-                                        </TabPanel>
-                                    </TabPanels>
-                                    </Tabs>
-                            <div id="chats">
+                            <div id="chats" onClick={()=>navigate('/chat')}>
                                 <h4>Chat 1</h4>
                             </div>
-                            <div id="chats">
+                            <div id="chats" onClick={()=>navigate('/chat')}>
                                 <h4>Chat 1</h4>
                             </div>
-                            <div id="chats">
+                            <div id="chats" onClick={()=>navigate('/chat')}>
                                 <p>sfhdjlsdfodkjfsolk</p>
                             </div>
-                            <div id="chats">
+                            <div id="chats" onClick={()=>navigate('/chat')}>
                                 <h4>Chat 1</h4>
                             </div>
-                            <div id="chats">
+                            <div id="chats" onClick={()=>navigate('/chat')}>
                                 <h4>Chat 1</h4>
                             </div>
-                            <div id="chats">
+                            <div id="chats" onClick={()=>navigate('/chat')}>
                                 <h4>Chat 1</h4>
                             </div>
-                            <div id="chats">
+                            <div id="chats" onClick={()=>navigate('/chat')}>
                                 <h4>Chat 1</h4>
                             </div>
-                            <div id="chats">
+                            <div id="chats" onClick={()=>navigate('/chat')}>
                                 <h4>Chat 1</h4>
                             </div>
                         </div>

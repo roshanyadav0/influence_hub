@@ -19,9 +19,9 @@ function Footer() {
                 <div>
                     <Stack varient='text' size='larger'>
                         <h1>Influencer Hub</h1>
-                        <Button onClick={()=>navigate('/category')}>Categories</Button>
+                        {/* <Button onClick={()=>navigate('/category')}>Categories</Button> */}
                         <Button onClick={()=>navigate('/features')}>Features</Button>
-                        <Button onClick={()=>navigate('/programs')}>Programs</Button>
+                        {/* <Button onClick={()=>navigate('/programs')}>Programs</Button> */}
                     </Stack>
                 </div>
                 <div>
@@ -29,7 +29,7 @@ function Footer() {
                     <Stack varient='text' size='larger'>
                         <Button onClick={()=>navigate('/about')}>About</Button>
                         <Button onClick={()=>navigate('/guide')}>How it works</Button>
-                        <Button onClick={()=>navigate('/team')}>Team</Button>
+                        <Button onClick={()=>navigate('/influencer')}>Influencer</Button>
                         <Button onClick={()=>navigate('/contact')}>Contact</Button>
                     </Stack>
                 </div>

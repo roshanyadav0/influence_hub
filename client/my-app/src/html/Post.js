@@ -25,7 +25,7 @@ function Post() {
             <div class="main-div-9">
                 <div class="nevigation-section">
                     <h1>Nevigate</h1>
-                    <button id="nevigation-button" onClick={()=>navigate('/home')}>Home</button>
+                    <button id="nevigation-button" onClick={()=>navigate('/')}>Home</button>
                     <button id="nevigation-button" onClick={()=>navigate('/chat')}>Chat</button>
                     <button id="nevigation-button" onClick={()=>navigate('/profile')}>Profile</button>
                 </div>

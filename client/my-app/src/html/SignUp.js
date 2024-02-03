@@ -1,9 +1,7 @@
 import React, { useState } from 'react'
 import { Button } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import Checkbox from '@mui/material/Checkbox';
 import '../css/SignUp.css'
-
 
 
 function SignUp() {
@@ -62,6 +60,7 @@ function SignUp() {
                 <form id="main-div-7" onSubmit={handleSignup}>
                     
                     <input type="text"
+                    id='input-box'
                     name="username"
                     value={formData.username}
                     onChange={handleInputChange}
@@ -69,19 +68,21 @@ function SignUp() {
                     </input>
 
                     <input type="email"
+                    id='input-box'
                     name="email"
                     value={formData.email}
                     onChange={handleInputChange} placeholder='Email'>
                     </input>
 
                     <input type="password"
+                    id='input-box'
                     name="password"
                     value={formData.password}
                     onChange={handleInputChange} placeholder='Password'>
                     </input>
 
                     <div id="terms">
-                        <Checkbox />
+                    <input id='check-box'  type='checkbox'></input>
                         <p>I agree to the Influencer Hub <span>User Agreement</span> and <span>Privacy Policy</span></p>
                     </div>
                     <Button id="btn7" variant='outlined' type="submit" >Register</Button>

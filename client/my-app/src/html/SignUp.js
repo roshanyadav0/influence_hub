@@ -27,7 +27,7 @@ function SignUp() {
         e.preventDefault();
     
         try {
-            const response = await fetch('http://localhost:5000/app/user/signup', {
+            const response = await fetch('https://influence-hub.onrender.com/app/user/signup', {
                 method: 'POST',
                 headers: {
                 'Content-Type': 'application/json',

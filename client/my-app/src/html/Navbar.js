@@ -5,6 +5,7 @@ import Avatar from '@mui/material/Avatar';
 import '../css/Navbar.css'
 import { ButtonGroup } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 
 
 function Navbar() {
@@ -19,8 +20,9 @@ function Navbar() {
     return (
         <div>
             <div class="main-div-1">
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" onClick={()=>navigate('/login')}/>
                 <div id='nav-div-1'>
+                <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" onClick={()=>navigate('/login')}/>
+                
                             <button id='button-mui' onClick={()=>navigate('/guide')}>HOW IT WORKS</button>
                             <button id='button-mui' onClick={()=>navigate('/features')}>FEATURES</button>
                             <button id='button-mui' onClick={()=>navigate('/influencer')}>FIND INFLUENCERS</button>
@@ -33,7 +35,7 @@ function Navbar() {
                 </div>
                 <div class="drop-down-menu">
                     <img
-                    src="https://example.com/your-image.jpg" // Replace with your image URL
+                    src="https://images.unsplash.com/photo-1489648022186-8f49310909a0?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8bGluZXxlbnwwfHwwfHx8MA%3D%3D" // Replace with your image URL
                     alt="Dropdown Trigger"
                     onClick={handleToggleDropdown}
                     />

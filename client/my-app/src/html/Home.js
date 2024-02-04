@@ -16,7 +16,7 @@ function Home() {
             </div>
             <div class="main-div-4">
                 <div>
-                    <img src="https://images.unsplash.com/photo-1504704911898-68304a7d2807?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OTR8fG5lb24lMjB2fGVufDB8fDB8fHww" alt='error'></img>
+                    <img id='bg-img-1' src="https://images.unsplash.com/photo-1504704911898-68304a7d2807?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OTR8fG5lb24lMjB2fGVufDB8fDB8fHww" alt='error'></img>
                     <div id="content-1">
                         <h1>HIRE THE BEST</h1>
                         <h2>INFLUENCERS FOR YOUR PROMOTIONS</h2>
@@ -27,7 +27,7 @@ function Home() {
                     </div>
                 </div>
                 <div>
-                    <img src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8d29ybGQlMjBpbiUyMG5pZ2h0fGVufDB8fDB8fHww" alt='error'></img>
+                    <img id='bg-img-2' src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8d29ybGQlMjBpbiUyMG5pZ2h0fGVufDB8fDB8fHww" alt='error'></img>
                     <div id="content-2">
                         <h1>TAP INTO A</h1>
                         <h1><span>GLOBAL NETWORK</span></h1>

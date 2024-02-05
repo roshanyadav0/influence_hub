@@ -228,8 +228,8 @@ export default function ProfileDetails() {
                             onChange={handleLanguagesChange}
                             />
                             <br />
-                            <button type="button" onClick={handleClearForm}>Clear Form</button>   
-                            <button type="submit">Submit</button>
+                            <button type="button" onClick={handleClearForm} >Clear Form</button>   
+                            <button type="submit" >Submit</button>
                         </form>                
                     </div>
             </div>

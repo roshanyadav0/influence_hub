@@ -1,12 +1,7 @@
 import React, { useState } from 'react'
-import Stack from '@mui/material/Stack';
-import Button from '@mui/material/Button';
 import Avatar from '@mui/material/Avatar';
 import '../css/Navbar.css'
-import { ButtonGroup } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
-
 
 function Navbar() {
     const navigate=new useNavigate();
@@ -20,7 +15,7 @@ function Navbar() {
     return (
         <div>
             <div class="main-div-1">
-                    <div>
+                    <div class="first-half-nav">
                         <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" onClick={()=>navigate('/login')}/>
                         <div id='nav-div-1'>                
                             <button id='button-mui' onClick={()=>navigate('/guide')}>HOW IT WORKS</button>
@@ -36,7 +31,7 @@ function Navbar() {
                 </div>
                 <div class="drop-down-menu">
                     <img
-                    src="https://images.unsplash.com/photo-1489648022186-8f49310909a0?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8bGluZXxlbnwwfHwwfHx8MA%3D%3D" // Replace with your image URL
+                    src='./3dot.jpg' // Replace with your image URL
                     alt="Dropdown Trigger"
                     onClick={handleToggleDropdown}
                     />

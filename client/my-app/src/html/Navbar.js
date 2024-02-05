@@ -20,14 +20,15 @@ function Navbar() {
     return (
         <div>
             <div class="main-div-1">
-                <div id='nav-div-1'>
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" onClick={()=>navigate('/login')}/>
-                
+                    <div>
+                        <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" onClick={()=>navigate('/login')}/>
+                        <div id='nav-div-1'>                
                             <button id='button-mui' onClick={()=>navigate('/guide')}>HOW IT WORKS</button>
                             <button id='button-mui' onClick={()=>navigate('/features')}>FEATURES</button>
                             <button id='button-mui' onClick={()=>navigate('/influencer')}>FIND INFLUENCERS</button>
                             <button id='button-mui' onClick={()=>navigate('/')}>HOME</button>
-                </div>
+                        </div>
+                    </div>
                 <div id='nav-div-2'>
                         <button id='button-mui' onClick={()=>navigate('/login')}>LOGIN</button>
                         <button id='button-mui' onClick={()=>navigate('/signup')}>SIGN UP</button>

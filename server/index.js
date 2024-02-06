@@ -19,7 +19,24 @@ const userSchema = new mongoose.Schema({
     username: String,
     email: String,
     password: String,
-});
+    firstName: String,
+    lastName: String,
+    role: String,
+    address: {
+        section: String,
+        city: String,
+        postalCode: String,
+        state: String,
+        country: String,
+        },
+        company: {
+        companyName: String,
+        timezone: String,
+        location: String,
+        },
+        languages: [String],
+    });
+
 
 const User = mongoose.model('User', userSchema);
 
@@ -104,6 +121,21 @@ app.post('/app/user/login', async (req, res) => {
     }
 });
 
+
+app.post('/your-backend-endpoint', async (req, res) => {
+    try {
+        const formData = req.body;
+    
+        // Create a new user document in MongoDB
+        const newUser = new User(formData);
+        await newUser.save();
+    
+        res.status(201).json({ success: true, message: 'User data submitted successfully' });
+        } catch (error) {
+        console.error('Error:', error);
+        res.status(500).json({ success: false, message: 'Internal Server Error' });
+        }
+    });
 
 
 

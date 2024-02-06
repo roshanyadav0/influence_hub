@@ -4,9 +4,11 @@ import Box_1 from './Box_1'
 import Footer from './Footer'
 import Select from 'react-select';
 import '../css/ProfileDetails.css'
+import { Navigate, useNavigate } from 'react-router-dom';
 
 export default function ProfileDetails() {
 
+    const navigate=new useNavigate();
 
 
             const [formData, setFormData] = useState({
@@ -96,6 +98,7 @@ export default function ProfileDetails() {
                     const data = await response.json();
                     console.log('Success:', data);
                     window.alert('Sucessfully Submited');
+                    navigate('/');
                     
                     } catch (error) {
                     // Handle errors

@@ -88,15 +88,18 @@ export default function ProfileDetails() {
                     });
                 
                     if (!response.ok) {
+                        window.alert("cant submit")
                         throw new Error('Network response was not ok');
                     }
                 
                     // Handle the success response from your backend
                     const data = await response.json();
                     console.log('Success:', data);
+                    window.alert('Sucessfully Submited');
                     
                     } catch (error) {
                     // Handle errors
+                    window.alert(error);
                     console.error('Error:', error);
                     }
                 };

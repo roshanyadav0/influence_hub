@@ -132,6 +132,7 @@ app.post('/your-backend-endpoint', async (req, res) => {
     
         res.status(201).json({ success: true, message: 'User data submitted successfully' });
         } catch (error) {
+            window.alert("cant submit",error);
         console.error('Error:', error);
         res.status(500).json({ success: false, message: 'Internal Server Error' });
         }

@@ -5,7 +5,7 @@ import '../css/Login.css'
 
 
 const fakeAuthentication = async (username, password, rememberMe) => {
-    const apiUrl = 'https:/localhost:5000/app/user/login'; // Replace with your actual backend API endpoint
+    const apiUrl = 'https://influence-hub.onrender.com/app/user/login'; // Replace with your actual backend API endpoint
     
         const requestOptions = {
         method: 'POST',

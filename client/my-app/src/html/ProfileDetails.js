@@ -79,7 +79,7 @@ export default function ProfileDetails() {
                 
                     try {
                     // Send the form data to your backend API
-                    const response = await fetch('http://localhost:5000/your-backend-endpoint', {
+                    const response = await fetch('https://influence-hub.onrender.com/your-backend-endpoint', {
                         method: 'POST',
                         headers: {
                         'Content-Type': 'application/json',

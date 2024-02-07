@@ -37,10 +37,9 @@ export default function ProfileDetails() {
                 useEffect(() => {
                     const fetchData = async () => {
                         try {
-                            // Make the GET request to fetch user data
-                            const response = await axios.get('http://localhost:5000/app/user/user1');
-                            // Set the fetched user data in the state
-                            setFormData(response.data);
+                            // Fetch user data from the backend
+                            const response = await axios.get('https://influence-hub.onrender.com/app/user/user1');
+                            setFormData(response.data); // Update the component state with the fetched user data
                         } catch (error) {
                             console.error('Error fetching user data:', error);
                             // Handle error (e.g., display error message)
@@ -49,26 +48,24 @@ export default function ProfileDetails() {
             
                     fetchData();
                 }, []); // Empty dependency array ensures useEffect runs only once when the component mounts
+
                 
-                const handleCreate = async () => {
-                    try {
-                        // Make the POST request to create a new user
-                        const response = await axios.post('http://localhost:5000/app/user', formData);
-                        console.log('User data created successfully:', response.data);
-                        // Handle success (e.g., display success message)
-                    } catch (error) {
-                        // Check if the error is a 400 Bad Request error
-                        if (error.response && error.response.status === 400) {
-                            // Display message to the user indicating that the user already exists
-                            alert('User already exists');
-                        } else {
-                            // Handle other errors (e.g., display error message)
+                
+                
+                const handleCreate = event => {
+                    event.preventDefault();
+            
+                    axios.post('http://localhost:5000/app/user', formData)
+                        .then(response => {
+
+                            console.log('User created successfully:', response.data);
+                            alert('User created successfully!');
+                        })
+                        .catch(error => {
                             console.error('Error creating user:', error);
-                        }
-                    }
-                };
-                
-                
+                        });
+                    };
+
                     const handleUpdate = event => {
                         event.preventDefault();
                 

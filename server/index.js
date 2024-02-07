@@ -122,65 +122,120 @@ app.post('/app/user/login', async (req, res) => {
 });
 
 
-app.post('/your-backend-endpoint', async (req, res) => {
-    try {
-        const formData = req.body;
+// app.post('/api/user', async (req, res) => {
+//     try {
+//         const formData = req.body;
     
-        // Create a new user document in MongoDB
-        const newUser = new User(formData);
-        await newUser.save();
+//         // Create a new user document in MongoDB
+//         const newUser = new User(formData);
+//         await newUser.save();
+//         res.send(201).json(newUser);
     
-        res.status(201).json({ success: true, message: 'User data submitted successfully' });
-        } catch (error) {
-            window.alert("cant submit",error);
-        console.error('Error:', error);
-        res.status(500).json({ success: false, message: 'Internal Server Error' });
-        }
-    });
+//         res.status(201).json({ success: true, message: 'User data submitted successfully' });
+//         } catch (error) {
+//             console.error('Error:', error);
+//             res.status(500).json({ success: false, message: 'Internal Server Error' });
+//         }
+//     });
 
 
-
-app.get('/app/users', async (req, res) => {
+app.post('/api/user', async (req, res) => {
     try {
-        const users = await User.find();
-        res.json(users);
-    } catch (err) {
-        console.error(err);
-        res.status(500).json({ message: 'Error fetching users' });
+        const user = new User(req.body);
+        await user.save();
+        res.status(201).json(user);
+    } catch (error) {
+        console.error('Error creating user:', error);
+        res.status(500).json({ message: 'Internal server error' });
     }
 });
+// app.get('/app/users', async (req, res) => {
+//     try {
+//         const users = await User.find();
+//         res.json(users);
+//     } catch (err) {
+//         console.error(err);
+//         res.status(500).json({ message: 'Error fetching users' });
+//     }
+// });
 
-// Get user profile by email route
-app.get('/app/user/profile/:email', async (req, res) => {
+// // Get user profile by email route
+// app.get('/app/user/profile/:email', async (req, res) => {
+//     try {
+//         const email = req.params.email;
+//         const user = await User.findOne({ email });
+
+//         if (!user) {
+//             return res.status(404).json({ message: 'User not found' });
+//         }
+
+//         res.json(user);
+//     } catch (err) {
+//         console.error(err);
+//         res.status(500).json({ message: 'Error fetching user profile' });
+//     }
+// });
+
+
+// // Get users by role route
+// app.get('/app/users/:role', async (req, res) => {
+//     try {
+//         const role = req.params.role.toLowerCase(); // Convert role to lowercase
+//         const users = await User.find({ role });
+//         res.json(users);
+//     } catch (err) {
+//         console.error(err);
+//         res.status(500).json({ message: 'Error fetching users by role' });
+//     }
+// });
+
+
+app.get('/api/user/:username', async (req, res) => {
     try {
-        const email = req.params.email;
-        const user = await User.findOne({ email });
-
+        const { username } = req.params;
+        const user = await User.findOne({ username });
         if (!user) {
             return res.status(404).json({ message: 'User not found' });
         }
-
         res.json(user);
-    } catch (err) {
-        console.error(err);
-        res.status(500).json({ message: 'Error fetching user profile' });
+    } catch (error) {
+        console.error('Error fetching user:', error);
+        res.status(500).json({ message: 'Internal server error' });
     }
 });
 
 
-// Get users by role route
-app.get('/app/users/:role', async (req, res) => {
+
+app.put('/api/user/:username', async (req, res) => {
     try {
-        const role = req.params.role.toLowerCase(); // Convert role to lowercase
-        const users = await User.find({ role });
-        res.json(users);
-    } catch (err) {
-        console.error(err);
-        res.status(500).json({ message: 'Error fetching users by role' });
+        const { username } = req.params;
+        const updatedUserData = req.body; // Assuming the request body contains the updated user data
+        const updatedUser = await User.findOneAndUpdate({ username }, updatedUserData, { new: true });
+        if (!updatedUser) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+        res.json(updatedUser);
+    } catch (error) {
+        console.error('Error updating user data:', error);
+        res.status(500).json({ message: 'Internal server error' });
     }
 });
 
 
+// Delete an existing user
+app.delete('/api/user/:username', async (req, res) => {
+    try {
+        const { username } = req.params;
+        const deletedUser = await User.findOneAndDelete({ username });
+        if (!deletedUser) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+        res.json({ message: 'User deleted successfully' });
+    } catch (error) {
+        console.error('Error deleting user:', error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+});
 
 
 app.get("/app/user/influncers")

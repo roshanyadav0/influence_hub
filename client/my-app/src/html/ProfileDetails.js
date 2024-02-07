@@ -35,7 +35,6 @@ export default function ProfileDetails() {
                 });
 
                 useEffect(() => {
-                    const fetchUserData = async () => {
                         const fetchUserData = async () => {
                             try {
                                 const response = await axios.get('https://influence-hub.onrender.com/api/user/user1');
@@ -45,9 +44,6 @@ export default function ProfileDetails() {
                                 // Handle error (e.g., display error message)
                             }
                         };
-                        fetchUserData();
-                    
-                    };
             
                     fetchUserData();
                 }, []); // Empty dependency array ensures useEffect runs only once when the component mounts

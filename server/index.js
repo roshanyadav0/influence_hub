@@ -122,6 +122,23 @@ app.post('/app/user/login', async (req, res) => {
 });
 
 
+// app.post('/api/user', async (req, res) => {
+//     try {
+//         const formData = req.body;
+    
+//         // Create a new user document in MongoDB
+//         const newUser = new User(formData);
+//         await newUser.save();
+//         res.send(201).json(newUser);
+    
+//         res.status(201).json({ success: true, message: 'User data submitted successfully' });
+//         } catch (error) {
+//             console.error('Error:', error);
+//             res.status(500).json({ success: false, message: 'Internal Server Error' });
+//         }
+//     });
+
+
 app.post('/api/user', async (req, res) => {
     try {
         const user = new User(req.body);
@@ -132,6 +149,8 @@ app.post('/api/user', async (req, res) => {
         res.status(500).json({ message: 'Internal server error' });
     }
 });
+
+
 // app.get('/app/users', async (req, res) => {
 //     try {
 //         const users = await User.find();

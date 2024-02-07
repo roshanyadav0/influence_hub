@@ -4,7 +4,7 @@ import Box_1 from './Box_1'
 import Footer from './Footer'
 import Select from 'react-select';
 import '../css/ProfileDetails.css'
-import { Navigate, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 export default function ProfileDetails() {
@@ -35,55 +35,69 @@ export default function ProfileDetails() {
                 });
 
                 useEffect(() => {
-                        const fetchUserData = async () => {
-                            try {
-                                const response = await axios.get('https://influence-hub.onrender.com/api/user/user1');
-                                setFormData(response.data);
-                            } catch (error) {
-                                console.error('Error fetching user data:', error);
-                                // Handle error (e.g., display error message)
-                            }
-                        };
-            
-                    fetchUserData();
-                }, []); // Empty dependency array ensures useEffect runs only once when the component mounts
-            
-                const handleSubmit = async event => {
-                    event.preventDefault();
-            
-                    try {
-                        // Update the user data with PUT request
-                        await axios.put(`https://influence-hub.onrender.com/api/user/${formData.username}`, formData);
-                        alert('User data updated successfully!');
-                    } catch (error) {
-                        if (error.response && error.response.status === 404) {
-                            // User not found, create a new user with POST request
-                            try {
-                                await axios.post('https://influence-hub.onrender.com/api/user', formData);
-                                alert('User created successfully!');
-                                console.log(formData)
-;                            } catch (error) {
-                                console.error('Error creating user:', error);
-                                // Handle error (e.g., display error message)
-                            }
-                        } else {
-                            console.error('Error updating user data:', error);
+                    const fetchData = async () => {
+                        try {
+                            // Make the GET request to fetch user data
+                            const response = await axios.get('http://localhost:5000/app/user/user1');
+                            // Set the fetched user data in the state
+                            setFormData(response.data);
+                        } catch (error) {
+                            console.error('Error fetching user data:', error);
                             // Handle error (e.g., display error message)
+                        }
+                    };
+            
+                    fetchData();
+                }, []); // Empty dependency array ensures useEffect runs only once when the component mounts
+                
+                const handleCreate = async () => {
+                    try {
+                        // Make the POST request to create a new user
+                        const response = await axios.post('http://localhost:5000/app/user', formData);
+                        console.log('User data created successfully:', response.data);
+                        // Handle success (e.g., display success message)
+                    } catch (error) {
+                        // Check if the error is a 400 Bad Request error
+                        if (error.response && error.response.status === 400) {
+                            // Display message to the user indicating that the user already exists
+                            alert('User already exists');
+                        } else {
+                            // Handle other errors (e.g., display error message)
+                            console.error('Error creating user:', error);
                         }
                     }
                 };
+                
+                
+                    const handleUpdate = event => {
+                        event.preventDefault();
+                
+                        axios.put(`http://localhost:5000/app/user/${formData.username}`, formData)
+                            .then(response => {
+    
+                                console.log('User updated successfully:', response.data);
+                                alert('User update successfully!');
+                            })
+                            .catch(error => {
+                                console.error('Error updated user:', error);
+                            });
+                        };
+
 
                 const handleDelete = async () => {
                     try {
-                        await axios.delete(`https://influence-hub.onrender.com/api/user/${formData.username}`);
-                        alert('User data deleted successfully!');
-                        // Clear the form data after deletion
+                        const response = await axios.delete(`http://localhost:5000/app/user/${formData.username}`);
+                        console.log('User deleted successfully:', response.data);
                         handleClearForm();
                     } catch (error) {
-                        console.error('Error deleting user data:', error);
-                        // Handle error (e.g., display error message)
+                        if (error.response && error.response.status === 404) {
+                            console.log('User not found');
+                        } else {
+                            console.error('Error deleting user data:', error);
+                        }
                     }
                 };
+                
             
                 const handleInputChange = event => {
                     const { name, value } = event.target;
@@ -126,47 +140,6 @@ export default function ProfileDetails() {
                     }));
                 };
                 
-                // Handle form submission
-                // const handleSubmit = async (e) => {
-                //     e.preventDefault();
-                
-                //     try {
-                //     // Send the form data to your backend API
-                //     const response = await fetch('https://influence-hub.onrender.com/your-backend-endpoint', {
-                //         method: 'POST',
-                //         headers: {
-                //         'Content-Type': 'application/json',
-                //         },
-                //         body: JSON.stringify(formData),
-                //     });
-                
-                //     if (!response.ok) {
-                //         window.alert("cant submit")
-                //         throw new Error('Network response was not ok');
-                //     }
-
-                //     const fetchUserData = () => {
-                //         axios.get('/api/user')
-                //             .then(response => {
-                //                 const { name, email } = response.data;
-                //                 setUserData({ name, email });
-                //             })
-                //             .catch(error => console.error('Error fetching user data:', error));
-                //     };
-                
-                //     // Handle the success response from your backend
-                //     const data = await response.json();
-                //     console.log('Success:', data);
-                //     window.alert('Sucessfully Submited');
-                //     navigate('/');
-                    
-                //     } catch (error) {
-                //     // Handle errors
-                //     window.alert(error);
-                //     console.error('Error:', error);
-                //     }
-                // };
-                
                 // Clear the form data
                 const handleClearForm = () => {
                     setFormData({
@@ -205,13 +178,13 @@ export default function ProfileDetails() {
     return (
         <div>
             <Navbar/>
-            <div class="box-1">
+            <div className="box-1">
                 <Box_1/>
             </div>
             <div>
-                    <div class="main-div-12">
+                    <div className="main-div-12">
                         <h2>Registration Form</h2>
-                            <form onSubmit={handleSubmit}>
+                            <form onSubmit={handleCreate}>
                             {/* Basic Information */}
                             <label>
                             Username:
@@ -373,10 +346,12 @@ export default function ProfileDetails() {
                             value={languageOptions.filter((option) => formData.languages.includes(option.value))}
                             options={languageOptions}
                             onChange={handleLanguagesChange}
+                            id='languages-select'
                             />
                             <br />
                             <button type="button" onClick={handleClearForm} >Clear Form</button>   
                             <button type="submit" >Submit</button>
+                            <button type="button" onClick={handleUpdate}>Update User</button>
                             <button type="button" onClick={handleDelete}>Delete</button>
                         </form>                
                     </div>

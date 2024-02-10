@@ -2,6 +2,9 @@ import React, { useState } from 'react'
 import { Button } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import '../css/SignUp.css'
+import axios from 'axios';
+
+const domain=process.env.REACT_APP_DOMAIN;
 
 
 function SignUp() {
@@ -10,48 +13,30 @@ function SignUp() {
     const [formData, setFormData] = useState({
         username: '',
         email: '',
-        password: '',
+        password: ''
     });
 
     const handleInputChange = (e) => {
-        setFormData({
-        ...formData,
-        [e.target.name]: e.target.value,
-        });
+        const { name, value } = e.target;
+        setFormData(prevState => ({
+            ...prevState,
+            [name]: value
+        }));
     };
-
 
     const handleSignup = async (e) => {
         e.preventDefault();
-    
-        try {
-            const response = await fetch('https://influence-hub.onrender.com/app/user/signup', {
-                method: 'POST',
-                headers: {
-                'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(formData),
-            });
         
-            if (response.ok) {
-                // Handle successful signup, e.g., redirect to login page
-                console.log('User successfully registered');
-                navigate('/');
+        try {
+            // Make a POST request to the signup endpoint
+            const response = await axios.post(`http://localhost:5000/app/user/signup`, formData);
+            console.log('Signup successful:', response.data);
 
-            } else {
-                const data = await response.json();
-                if (data.message.includes('Email is already registered') || data.message.includes('Username is already registered')) {
-                // Display an alert message
-                window.alert(data.message);
-                } else {
-                // Handle other errors
-                console.error('Failed to register user:', data.message);
-                }
-            }
-            } catch (error) {
-            console.error('Error during signup:', error);
-            }
-        };
+            navigate(`/?username=${formData.username}`);
+        } catch (error) {
+            console.error('Error signing up:', error);
+        }
+    };
 
 
     return (

@@ -2,37 +2,9 @@ import { Button } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import React, { useState } from 'react';
 import '../css/Login.css'
+import axios from 'axios';
 
-
-const fakeAuthentication = async (username, password, rememberMe) => {
-    const apiUrl = 'https://influence-hub.onrender.com/app/user/login'; // Replace with your actual backend API endpoint
-    
-        const requestOptions = {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ username, password, rememberMe }),
-        };
-    
-        try {
-        const response = await fetch(apiUrl, requestOptions);
-    
-        if (!response.ok) {
-            throw new Error('Authentication failed');
-        }
-    
-        const data = await response.json();
-    
-        if (data.success) {
-            return 'success';
-        } else {
-            throw new Error('Invalid username or password');
-        }
-        } catch (error) {
-        throw new Error(`Authentication error: ${error.message}`);
-        }
-    };
+const domain=process.env.REACT_APP_DOMAIN;
 
 
 function Login() {
@@ -40,39 +12,44 @@ function Login() {
 
     
     const [formData, setFormData] = useState({
-        usernameOrEmail: '',
+        username: '',
         password: '',
         rememberMe: false,
         });
+        
 
     const handleChange = (e) => {
         const { name, value, type, checked } = e.target;
+        
         setFormData((prevData) => ({
             ...prevData,
             [name]: type === 'checkbox' ? checked : value,
             }));
         };
 
-
-        const handleSubmit = async (e) => {
-            e.preventDefault();
-        
+        const handleSubmit = async (event) => {
+            event.preventDefault();
             if (!formData.rememberMe) {
-                alert('Please check the "Remember Me" checkbox before attempting to log in.');
-                return;
+                        alert('Please check the "Remember Me" checkbox before attempting to log in.');
+                        return;
+                        }
+            try {
+                // Make a POST request to login route (assuming it's /login)
+                const response = await axios.post(`${domain}/app/user/login`, {formData});
+                
+                if (response.data.success) {
+                    // Redirect to the home page if authentication is successful
+                    console.log("login sucessfull");
+                    console.log(formData.username);
+                    navigate(`/?username=${formData.username}`);
+                } else {
+                    // Handle authentication failure
+                    alert(response.data.message || 'Authentication failed');
                 }
-            
-                try {
-                // Call the authentication function
-                await fakeAuthentication(formData.usernameOrEmail, formData.password, formData.rememberMe);
-                alert('Login successful!');
-                // Redirect to the home page (you can replace this with your actual home page route)
-                navigate('/');
-                } catch (error) {
-                console.error('Authentication error:', error.message);
-                alert('Invalid username or password. Please try again.');
-                }
-            };
+            } catch (error) {
+                console.error('Error logging in:', error);
+            }
+        };
 
     return (
         <div className="main-div-7">
@@ -80,8 +57,8 @@ function Login() {
                 <form onSubmit={handleSubmit}>
                     <input id='input-box' placeholder='Username'
                     type="text"
-                    name="usernameOrEmail"
-                    value={formData.usernameOrEmail}
+                    name="username"
+                    value={formData.username}
                     onChange={handleChange}
                     required
                     ></input>

@@ -4,7 +4,7 @@ import Box_1 from './Box_1'
 import Footer from './Footer'
 import Select from 'react-select';
 import '../css/ProfileDetails.css'
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 const domain =process.env.REACT_APP_DOMAIN;
@@ -15,8 +15,14 @@ export default function ProfileDetails() {
 
     const navigate=new useNavigate();
 
+    const location = useLocation();
+    const queryParams = new URLSearchParams(location.search);
+    {console.log(queryParams)};
+    const username = queryParams.get('username');
+
 
             const [formData, setFormData] = useState({
+                    profilephoto:'',
                     username:'',
                     email:'',
                     password:'',
@@ -42,7 +48,7 @@ export default function ProfileDetails() {
                     const fetchData = async () => {
                         try {
                             // Fetch user data from the backend
-                            const response = await axios.get(`${domain}/app/user/user1`);
+                            const response = await axios.get(`${domain}/app/user/${username}`);
                             setFormData(response.data); // Update the component state with the fetched user data
                         } catch (error) {
                             console.error('Error fetching user data:', error);
@@ -144,6 +150,7 @@ export default function ProfileDetails() {
                 // Clear the form data
                 const handleClearForm = () => {
                     setFormData({
+                    profilephoto:'',
                     uername:'',
                     email:'',
                     password:'',
@@ -187,6 +194,16 @@ export default function ProfileDetails() {
                         <h2>Registration Form</h2>
                             <form onSubmit={handleCreate}>
                             {/* Basic Information */}
+                            <label>
+                            Profile Photo:
+                            <input
+                                type="text"
+                                name="profilephoto"
+                                value={formData.profilephoto}
+                                onChange={handleInputChange}
+                                style={{ color: 'red' }}
+                            />
+                            </label>
                             <label>
                             Username:
                             <input
@@ -255,7 +272,7 @@ export default function ProfileDetails() {
                             <input
                                 type="text"
                                 name="section"
-                                value={formData.address.section}
+                                value={formData.section}
                                 onChange={handleAddressChange}
                             />
                             </label>
@@ -265,7 +282,7 @@ export default function ProfileDetails() {
                             <input
                                 type="text"
                                 name="city"
-                                value={formData.address.city}
+                                value={formData.city}
                                 onChange={handleAddressChange}
                             />
                             </label>
@@ -275,7 +292,7 @@ export default function ProfileDetails() {
                             <input
                                 type="text"
                                 name="postalCode"
-                                value={formData.address.postalCode}
+                                value={formData.postalCode}
                                 onChange={handleAddressChange}
                             />
                             </label>
@@ -285,7 +302,7 @@ export default function ProfileDetails() {
                             <input
                                 type="text"
                                 name="state"
-                                value={formData.address.state}
+                                value={formData.state}
                                 onChange={handleAddressChange}
                             />
                             </label>
@@ -295,7 +312,7 @@ export default function ProfileDetails() {
                             <input
                                 type="text"
                                 name="country"
-                                value={formData.address.country}
+                                value={formData.country}
                                 onChange={handleAddressChange}
                             />
                             </label>
@@ -310,7 +327,7 @@ export default function ProfileDetails() {
                                 <input
                                     type="text"
                                     name="companyName"
-                                    value={formData.company.companyName}
+                                    value={formData.companyName}
                                     onChange={handleCompanyChange}
                                 />
                                 </label>
@@ -320,7 +337,7 @@ export default function ProfileDetails() {
                                 <input
                                     type="text"
                                     name="timezone"
-                                    value={formData.company.timezone}
+                                    value={formData.timezone}
                                     onChange={handleCompanyChange}
                                 />
                                 </label>
@@ -330,7 +347,7 @@ export default function ProfileDetails() {
                                 <input
                                     type="text"
                                     name="location"
-                                    value={formData.company.location}
+                                    value={formData.location}
                                     onChange={handleCompanyChange}
                                 />
                                 </label>

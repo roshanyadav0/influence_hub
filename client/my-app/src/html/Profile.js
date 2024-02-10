@@ -1,12 +1,42 @@
-import React from 'react'
+import React, { useEffect, useState  } from 'react';
 import '../css/Profile.css'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import Box_1 from './Box_1';
 import Navbar from './Navbar';
 import Footer from './Footer';
+import axios from 'axios';
+
+const domain=process.env.REACT_APP_DOMAIN;
+
 
 function Profile() {
+
     const navigate=new useNavigate();
+
+    const [user, setUsers] = useState([]);
+
+    const location = useLocation();
+    const queryParams = new URLSearchParams(location.search);
+    {console.log(queryParams)};
+    const username = queryParams.get('username');
+
+
+    useEffect(() => {
+        const fetchUsers = async () => {
+            try {
+                // Make a GET request to fetch all users
+                const response = await axios.get(`${domain}/app/user/${username}`);
+                console.log(response.data);
+                setUsers(response.data);
+                console.log("sucessfully fetched the users");
+            } catch (error) {
+                console.error('Error fetching users:', error);
+            }
+        };
+
+        fetchUsers();
+    }, []);
+
     return (
         <div>
             <Navbar/>
@@ -17,14 +47,17 @@ function Profile() {
                 <div className="main-content-5">
                     <div >
                         <div id="profile-description">
-                            <img id="profile-photo" src='https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MjZ8fHBvcnRyYWl0fGVufDB8fDB8fHww' alt='profile-photo'></img>
-                            <h1>Id</h1>
-                            <p>Name</p>
-                            <p>Description</p>
-                        </div>
+                                {console.log(user)}
+                                            <img id="profile-photo" src={user.profilephoto} alt='profile-photo'></img>
+                                            <h1>{user.username}</h1>
+                                            <p>{user.firstName} {user.lastName}</p>
+                                            <p>{user.email}</p>
+                                            <p>{user.description}</p>
+                                        </div>
+                        
                         <div id='profile-details'>
                             <div>
-                                <h1 onClick={()=>navigate('/profiledetails')}>Profile Details</h1>
+                                <h1 onClick={()=>navigate(`/profiledetails/?username=${username}`)}>Profile Details</h1>
                             </div>
                         </div>
                         <div className="post-add" >
@@ -49,30 +82,9 @@ function Profile() {
                         <div id="review">
                             <h1>Review</h1>
                         </div>
-                        <div id="chat-box">
+                        <div id="chat-box" >
                             <h1>Chats</h1>
-                            <div id="chats" onClick={()=>navigate('/chat')}>
-                                <h4>Chat 1</h4>
-                            </div>
-                            <div id="chats" onClick={()=>navigate('/chat')}>
-                                <h4>Chat 1</h4>
-                            </div>
-                            <div id="chats" onClick={()=>navigate('/chat')}>
-                                <p>sfhdjlsdfodkjfsolk</p>
-                            </div>
-                            <div id="chats" onClick={()=>navigate('/chat')}>
-                                <h4>Chat 1</h4>
-                            </div>
-                            <div id="chats" onClick={()=>navigate('/chat')}>
-                                <h4>Chat 1</h4>
-                            </div>
-                            <div id="chats" onClick={()=>navigate('/chat')}>
-                                <h4>Chat 1</h4>
-                            </div>
-                            <div id="chats" onClick={()=>navigate('/chat')}>
-                                <h4>Chat 1</h4>
-                            </div>
-                            <div id="chats" onClick={()=>navigate('/chat')}>
+                            <div id="chats" onClick={()=>navigate(`/chat/?chatname=${user.chatname}`)}>
                                 <h4>Chat 1</h4>
                             </div>
                         </div>

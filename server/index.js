@@ -1,6 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
+const session = require('express-session');
 const cors = require('cors');
 const bcrypt = require('bcrypt'); // Import the bcrypt package
 
@@ -10,6 +11,9 @@ require("dotenv").config();
 const app = express();
 const PORT = process.env.PORT;
 const mongourl=process.env.MONGOURL;
+
+console.log(PORT);
+console.log(mongourl);
 
 mongoose.connect(`${mongourl}`, { useNewUrlParser: true, useUnifiedTopology: true });
 const db = mongoose.connection;
@@ -25,6 +29,7 @@ db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
 
 const userSchema = new mongoose.Schema({
+    profilephoto: String,
     username: String,
     email: String,
     password: String,
@@ -51,6 +56,13 @@ const User = mongoose.model('User', userSchema);
 
 app.use(bodyParser.json());
 app.use(cors());
+
+app.use(session({
+    secret: 'secret-key', // Change this to a random secret key
+    resave: false,
+    saveUninitialized: true
+}));
+
 
 // app.post('/app/user/signup', async (req, res) => {
 //     const { username, email, password } = req.body;
@@ -179,6 +191,45 @@ app.use(cors());
 //         });
 // });
 
+app.post('/app/user/signup', async (req, res) => {
+    const { username, email, password } = req.body;
+
+    // Validate signup data
+    if (!username || !email || !password) {
+        return res.status(400).json({ message: 'Please provide username, email, and password' });
+    }
+
+    try {
+        // Create a new user document
+        const newUser = new User({ username, email, password });
+        await newUser.save();
+
+        req.session.user = { username: 'exampleUser' }; 
+        res.status(201).json({ message: 'User signed up successfully' });
+
+
+    } catch (error) {
+        console.error('Error saving user to database:', error);
+        res.status(500).json({ message: 'Internal Server Error' });
+    }
+});
+
+
+app.post('/app/user/login', (req, res) => {
+    const { username, password } = req.body;
+
+    // Here you would perform authentication (e.g., check username and password against a database)
+    // For demonstration purposes, we'll just check if the username and password match 'admin'
+    // if (username === 'admin' && password === 'password') {
+        if (true) {
+        res.status(200).json({ success: true });
+        console.log(req.body);
+    } else {
+        res.status(401).json({ success: false, message: 'Authentication failed' });
+    }
+});
+
+
 app.post('/app/user', (req, res) => {
     const formData = req.body;
 
@@ -222,7 +273,7 @@ app.get('/app/user', (req, res) => {
 
 app.get('/app/user/:username',(req,res)=>{
     const {username} = req.params;
-
+    console.log(req.params);
     if (!username) {
         return res.status(400).json({ message: 'Username parameter is required' });
     }

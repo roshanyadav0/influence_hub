@@ -1,10 +1,42 @@
-import React from 'react'
+import React, { useEffect, useState  } from 'react';
 import '../css/Chat.css'
 import Box_1 from './Box_1'
 import Navbar from './Navbar'
 import Footer from './Footer'
+import { useLocation, useNavigate } from 'react-router-dom'
+import axios from 'axios';
+
+
+
+const domain=process.env.REACT_APP_DOMAIN;
+
 
 function Chat() {
+
+    const [user, setUsers] = useState([]);
+
+    const location = useLocation();
+    const queryParams = new URLSearchParams(location.search);
+    {console.log(queryParams)};
+    const chatname = queryParams.get('chatname');
+
+
+    useEffect(() => {
+        const fetchUsers = async () => {
+            try {
+                // Make a GET request to fetch all users
+                const response = await axios.get(`${domain}/app/user/${chatname}`);
+                console.log(response.data);
+                setUsers(response.data);
+                console.log("sucessfully fetched the users");
+            } catch (error) {
+                console.error('Error fetching users:', error);
+            }
+        };
+
+        fetchUsers();
+    }, []);
+
     return (
         <div>
             <Navbar/>

@@ -74,7 +74,7 @@ function SignUp() {
 
         try {
             // Make a POST request to the signup endpoint
-            const response = await axios.post(`http://localhost:5000/app/user/signup`, formData);
+            const response = await axios.post(`${domain}/app/user/signup`, formData);
             console.log('Signup successful:', response.data);
 
             navigate(`/?username=${formData.username}`);

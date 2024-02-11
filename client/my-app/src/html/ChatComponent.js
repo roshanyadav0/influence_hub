@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import '../css/ChatComponent.css';
 
+const domain=process.env.REACT_APP_DOMAIN;
 
 
 function ChatComponent({ chatId, username, destinationUsername }) {
@@ -18,7 +19,7 @@ function ChatComponent({ chatId, username, destinationUsername }) {
 
     const fetchChatHistory = async () => {
         try {
-        const response = await axios.get(`http://localhost:5000/api/chat-rooms/${chatId}/history`);
+        const response = await axios.get(`${domain}/api/chat-rooms/${chatId}/history`);
         setHistory(response.data);
         } catch (error) {
         console.error('Error fetching chat history:', error);
@@ -29,7 +30,7 @@ function ChatComponent({ chatId, username, destinationUsername }) {
         if (newMessage.trim() !== '') {
         try {
             const currentTime = new Date().toLocaleString();
-            await axios.post(`http://localhost:5000/api/chat-rooms/${chatId}/send-message`, {
+            await axios.post(`${domain}/api/chat-rooms/${chatId}/send-message`, {
             text: newMessage,
             senderusername: username,
             destinationUsername,

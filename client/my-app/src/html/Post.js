@@ -9,6 +9,8 @@ import axios from 'axios';
 import PostCard from './PostCard';
 
 
+const domain=process.env.REACT_APP_DOMAIN;
+
 
 
 function Post() {
@@ -26,7 +28,7 @@ function Post() {
         // Fetch all posts from the backend
         const fetchPosts = async () => {
         try {
-            const response = await axios.get('http://localhost:5000/app/posts');
+            const response = await axios.get(`${domain}/app/posts`);
             setPosts(response.data);
         } catch (error) {
             console.error('Error fetching posts:', error);

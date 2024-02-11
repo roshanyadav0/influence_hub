@@ -146,7 +146,7 @@ function Profile() {
                     formDataToSend.append('description', formData.description);
                     formDataToSend.append('image', selectedImage); // Ensure the key matches the expected key on the server side
             
-                    const response = await axios.post('http://localhost:5000/app/posts', formDataToSend, {
+                    const response = await axios.post(`${domain}/app/posts`, formDataToSend, {
                         headers: {
                             'Content-Type': 'multipart/form-data',
                         },

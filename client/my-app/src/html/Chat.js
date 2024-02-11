@@ -61,7 +61,7 @@ function Chat({ chatId }) {
 
     const fetchChatRooms = async () => {
         try {
-        const response = await axios.get('http://localhost:5000/api/chat-rooms');
+        const response = await axios.get(`${domain}/api/chat-rooms`);
         setChatRooms(response.data);
         } catch (error) {
         console.error('Error fetching chat rooms:', error);
@@ -71,7 +71,7 @@ function Chat({ chatId }) {
     const handleNewChatSubmit = async (e) => {
         e.preventDefault();
         try {
-            await axios.post('http://localhost:5000/api/chat-rooms', { chatId: formData.chatId,username:{username}, destinationUsername: formData.otherUsername });
+            await axios.post(`${domain}/api/chat-rooms`, { chatId: formData.chatId,username:{username}, destinationUsername: formData.otherUsername });
             fetchChatRooms();
             setShowForm(false); // Hide the form after submission
             // Optionally, you can clear the input fields after successful submission

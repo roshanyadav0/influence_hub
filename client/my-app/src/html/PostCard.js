@@ -24,11 +24,10 @@ export default function PostCard({title,description,image,username}) {
                     />
                     <Stack>
                         <CardBody>
-                        <Heading size='md'>The perfect latte {title}</Heading>
+                        <Heading size='md'>{title} ___________________________<span>{username}</span></Heading>
 
                         <Text py='2'>
-                            Caffè latte is a coffee beverage of Italian origin made with espresso
-                            and steamed milk.{description}
+                            {description}
                         </Text>
                         </CardBody>
 

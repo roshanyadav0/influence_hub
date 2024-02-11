@@ -5,21 +5,22 @@ const session = require('express-session');
 const cors = require('cors');
 const bcrypt = require('bcrypt'); // Import the bcrypt package
 
+
 require("dotenv").config();
 
 
 const app = express();
-const PORT = process.env.PORT;
-const mongourl=process.env.MONGOURL;
+const PORT = 5000;
+// const mongourl=process.env.MONGOURL;
 
-console.log(PORT);
-console.log(mongourl);
+// console.log(PORT);
+// console.log(mongourl);
 
-mongoose.connect(`${mongourl}`, { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect(`mongodb+srv://ry9826653:123456789987654321@cluster0.q1bdkdy.mongodb.net/app`, { useNewUrlParser: true, useUnifiedTopology: true });
 const db = mongoose.connection;
 
-console.log(PORT);
-console.log(mongourl);
+// console.log(PORT);
+// console.log(mongourl);
 
 
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
@@ -43,12 +44,14 @@ const userSchema = new mongoose.Schema({
         state: String,
         country: String,
         },
-        company: {
+    company: {
         companyName: String,
         timezone: String,
         location: String,
-        },
-        languages: [String],
+    },
+    languages: [String], 
+    description: String,
+    rememberMe: Boolean,
     });
 
 
@@ -57,12 +60,72 @@ const User = mongoose.model('User', userSchema);
 app.use(bodyParser.json());
 app.use(cors());
 
-app.use(session({
-    secret: 'secret-key', // Change this to a random secret key
-    resave: false,
-    saveUninitialized: true
-}));
 
+const messageSchema = new mongoose.Schema({
+    text: {
+        type: String,
+        required: true
+        },
+        time: {
+        type: Date,
+        default: Date.now
+        }
+    });
+    
+    const chatRoomSchema = new mongoose.Schema({
+        chatId: {
+        type: String,
+        required: true,
+        unique: true
+        },
+        username: {
+        type: String,
+        required: false
+        },
+        destinationUsername: {
+        type: String,
+        required: false
+        },
+        messages: [messageSchema]
+    });
+    
+    const ChatRoom = mongoose.model('ChatRoom', chatRoomSchema);
+
+// **********************************************************************
+const multer = require('multer');
+const { v2: cloudinary } = require('cloudinary');
+const { CloudinaryStorage } = require('multer-storage-cloudinary');
+
+const router = express.Router();
+
+const postSchema = new mongoose.Schema({
+    username: String,
+    title: String,
+    description: String,
+    imageUrl: String,
+});
+    
+const Post = mongoose.model('Post', postSchema);
+    
+    // Configure Cloudinary
+    cloudinary.config({ 
+        cloud_name: 'dav5sgqts', 
+        api_key: '178322753313299', 
+        api_secret: 'nBOcwOzGAVQUCGDKDpMQoWr0iZE' 
+    });
+    
+// Configure Multer storage engine for Cloudinary
+const storage = new CloudinaryStorage({
+    cloudinary: cloudinary,
+    params: {
+      folder: 'YOUR_FOLDER', // optional, folder in Cloudinary where the images will be stored
+      allowed_formats: ['jpg', 'jpeg', 'png'], // optional, allowed image formats
+      // other optional parameters
+    },
+    });
+    
+    // Create Multer parser
+    const parser = multer({ storage: storage });
 
 // app.post('/app/user/signup', async (req, res) => {
 //     const { username, email, password } = req.body;
@@ -191,29 +254,41 @@ app.use(session({
 //         });
 // });
 
+// app.post('/app/user/signup', async (req, res) => {
+//     const { username, email, password ,} = req.body;
+
+//     // Validate signup data
+//     if (!username || !email || !password) {
+//         return res.status(400).json({ message: 'Please provide username, email, and password' });
+//     }
+
+//     try {
+//         // Create a new user document
+//         const newUser = new User({ username, email, password });
+//         await newUser.save();
+
+//         req.session.user = { username: 'exampleUser' }; 
+//         res.status(201).json({ message: 'User signed up successfully' });
+
+
+//     } catch (error) {
+//         console.error('Error saving user to database:', error);
+//         res.status(500).json({ message: 'Internal Server Error' });
+//     }
+// });
+
 app.post('/app/user/signup', async (req, res) => {
-    const { username, email, password } = req.body;
-
-    // Validate signup data
-    if (!username || !email || !password) {
-        return res.status(400).json({ message: 'Please provide username, email, and password' });
-    }
-
     try {
-        // Create a new user document
-        const newUser = new User({ username, email, password });
-        await newUser.save();
-
-        req.session.user = { username: 'exampleUser' }; 
-        res.status(201).json({ message: 'User signed up successfully' });
-
-
-    } catch (error) {
-        console.error('Error saving user to database:', error);
-        res.status(500).json({ message: 'Internal Server Error' });
-    }
-});
-
+      // Create new user document
+        const user = new User(req.body);
+        // Save user to MongoDB
+        await user.save();
+        res.status(201).json({ message: 'User signed up successfully', user });
+        } catch (error) {
+        console.error('Error signing up:', error);
+        res.status(500).json({ error: 'Internal server error' });
+        }
+    });
 
 app.post('/app/user/login', (req, res) => {
     const { username, password } = req.body;
@@ -342,6 +417,184 @@ app.delete('/app/user/:username', (req, res) => {
         });
 });
 
+// ******************************************************** Chat 
+
+
+app.get('/api/chat-rooms', async (req, res) => {
+    try {
+        const chatRooms = await ChatRoom.find();
+        res.json(chatRooms);
+        } catch (error) {
+        console.error('Error fetching chat rooms:', error);
+        res.status(500).json({ error: 'Internal server error' });
+        }
+    });
+    
+    // app.post('/api/chat-rooms', async (req, res) => {
+    //     const { chatId, senderId, receiverId } = req.body;
+    //     try {
+    //     const chatRoom = new ChatRoom({ chatId, username, destinationUsername, messages: [] });
+    //     await chatRoom.save();
+    //     res.status(201).json(chatRoom);
+    //     } catch (error) {
+    //     console.error('Error creating chat room:', error);
+    //     res.status(500).json({ error: 'Internal server error' });
+    //     }
+    // });
+
+    app.post('/api/chat-rooms', async (req, res) => {
+        const { chatId, senderId, receiverId } = req.body;
+    
+        try {
+            // Check if the chat room already exists
+            const existingChatRoom = await ChatRoom.findOne({ chatId });
+            if (existingChatRoom) {
+                return res.status(400).json({ error: 'Chat room already exists' });
+            }
+    
+            // Create a new chat room
+            const chatRoom = new ChatRoom({
+                chatId,
+                senderId,
+                receiverId,
+                messages: []
+            });
+    
+            // Save the new chat room to the database
+            await chatRoom.save();
+    
+            // Return the newly created chat room
+            res.status(201).json(chatRoom);
+        } catch (error) {
+            console.error('Error creating chat room:', error);
+            res.status(500).json({ error: 'Internal server error' });
+        }
+    });
+    
+
+    // app.get('/api/chat-rooms/:chatId/history', async (req, res) => {
+    //     const { chatId } = req.params;
+    //     try {
+    //         const chatRoom = await ChatRoom.findOne({ chatId });
+    //         if (!chatRoom) {
+    //             return res.status(404).json({ error: 'Chat room not found' });
+    //         }
+    //         res.json(chatRoom.messages);
+    //         } catch (error) {
+    //         console.error('Error fetching chat history:', error);
+    //         res.status(500).json({ error: 'Internal server error' });
+    //         }
+    //     });
+    
+// Backend route for sending messages
+app.post('/api/chat-rooms/:chatId/send-message', async (req, res) => {
+    const { chatId } = req.params;
+    const { text, senderUsername, destinationUsername, time } = req.body;
+    try {
+        const chatRoom = await ChatRoom.findOneAndUpdate(
+            { chatId },
+            { $push: { messages: { text, senderUsername, destinationUsername, time } } },
+            { new: true }
+        );
+        res.json(chatRoom);
+        } catch (error) {
+        console.error('Error sending message:', error);
+        res.status(500).json({ error: 'Internal server error' });
+        }
+    });
+    
+    // Backend route for fetching chat history
+    app.get('/api/chat-rooms/:chatId/history', async (req, res) => {
+        const { chatId } = req.params;
+        try {
+        const chatRoom = await ChatRoom.findOne({ chatId });
+        if (!chatRoom) {
+            return res.status(404).json({ error: 'Chat room not found' });
+        }
+        res.json(chatRoom.messages);
+        } catch (error) {
+        console.error('Error fetching chat history:', error);
+        res.status(500).json({ error: 'Internal server error' });
+        }
+    });
+
+
+    // *********************************************************************
+    
+
+    // app.post('/app/posts', upload.single('image'), async (req, res) => {
+    //     console.log(req.body);
+    //     try {
+    //         // Check if file is uploaded
+    //         if (!req.file) {
+    //             return res.status(400).json({ error: 'No file uploaded' });
+    //         }
+            
+    //         // Upload image to Cloudinary
+    //         const result = await cloudinary.uploader.upload(req.file.path, {
+    //             folder: 'posts', // optional, folder in Cloudinary where the images will be stored
+    //         });
+    
+    //         // Create new post document
+    //         const post = new Post({
+    //             username: req.body.username,
+    //             title: req.body.title,
+    //             description: req.body.description,
+    //             imageUrl: result.secure_url,
+    //         });
+    
+    //         // Save post to MongoDB
+    //         await post.save();
+    
+    //         res.status(201).json({ message: 'Post created successfully', post });
+    //     } catch (error) {
+    //         console.error('Error creating post:', error);
+    //         res.status(500).json({ error: 'Internal server error' });
+    //     }
+    // });
+
+    app.post('/app/posts', parser.single('image'), async (req, res) => {
+            try {
+            // Check if file is uploaded
+            if (!req.file) {
+                return res.status(400).json({ error: 'No file uploaded' });
+            }
+            
+            // Upload image to Cloudinary
+            const result = await cloudinary.uploader.upload(req.file.path, {
+                folder: 'posts', // optional, folder in Cloudinary where the images will be stored
+            });
+        
+            // Create new post document
+            const post = new Post({
+                username: req.body.username,
+                title: req.body.title,
+                description: req.body.description,
+                imageUrl: result.secure_url,
+            });
+        
+            // Save post to MongoDB
+            await post.save();
+        
+            res.status(201).json({ message: 'Post created successfully', post });
+            } catch (error) {
+            console.error('Error creating post:', error);
+            res.status(500).json({ error: 'Internal server error' });
+            }
+        });
+
+
+        app.get('/app/posts', async (req, res) => {
+            try {
+                const posts = await Post.find();
+                res.json(posts);
+                console.log("accssed this",posts);
+                } catch (error) {
+                console.error('Error fetching posts:', error);
+                res.status(500).json({ error: 'Internal server error' });
+                }
+            });
+        
 
 // app.get("/app/user/influncers")
 // app.get("/app/user/influncers/:influencerId")

@@ -30,16 +30,16 @@ export default function ProfileDetails() {
                     lastName: '',
                     role: 'admin',
                     address: {
-                    section: '',
-                    city: '',
-                    postalCode: '',
-                    state: '',
-                    country: '',
+                        section: '',
+                        city: '',
+                        postalCode: '',
+                        state: '',
+                        country: '',
                     },
                     company: {
-                    companyName: '',
-                    timezone: '',
-                    location: '',
+                        companyName: '',
+                        timezone: '',
+                        location: '',
                     },
                     languages: [],
                 });
@@ -170,6 +170,7 @@ export default function ProfileDetails() {
                         location: '',
                     },
                     languages: [],
+                    description:'',
                     });
                 };
         
@@ -181,6 +182,14 @@ export default function ProfileDetails() {
             { value: 'german', label: 'German' },
             // Add more language options as needed
         ];
+
+        const handleDescriptionChange = (e) => {
+            setFormData(prevState => ({
+                ...prevState,
+                description: e.target.value
+            }));
+        };
+    
     
 
     return (
@@ -366,9 +375,17 @@ export default function ProfileDetails() {
                             onChange={handleLanguagesChange}
                             id='languages-select'
                             />
+                            <h3>Description:</h3>
+                            <label>
+                                <textarea
+                                    value={formData.description}
+                                    onChange={handleDescriptionChange}
+                                    placeholder="Enter description"
+                                    style={{ width: '60vw', height: '20vh' , margin:'20px' }}
+                                />
+                                </label>
                             <br />
                             <button type="button" onClick={handleClearForm} >Clear Form</button>   
-                            <button type="submit" >Submit</button>
                             <button type="button" onClick={handleUpdate}>Update User</button>
                             <button type="button" onClick={handleDelete}>Delete</button>
                         </form>                

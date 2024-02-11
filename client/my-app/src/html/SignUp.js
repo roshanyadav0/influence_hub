@@ -10,10 +10,34 @@ const domain=process.env.REACT_APP_DOMAIN;
 function SignUp() {
     const navigate=new useNavigate();
 
+    // const [formData, setFormData] = useState({
+    //     username: '',
+    //     email: '',
+    //     password: ''
+    // });
     const [formData, setFormData] = useState({
-        username: '',
-        email: '',
-        password: ''
+        profilephoto:'',
+        username:'',
+        email:'',
+        password:'',
+        firstName: '',
+        lastName: '',
+        role: 'admin',
+        address: {
+            section: '',
+            city: '',
+            postalCode: '',
+            state: '',
+            country: 'default',
+        },
+        company: {
+            companyName: '',
+            timezone: '',
+            location: 'default',
+        },
+        languages: [],
+        description: '',
+        rememberMe: false,
     });
 
     const handleInputChange = (e) => {
@@ -22,11 +46,32 @@ function SignUp() {
             ...prevState,
             [name]: value
         }));
+
+        setFormData(prevState => ({
+            ...prevState,
+            address: {
+                ...prevState.address,
+                [name]: 'default'
+                }
+            }));
+            
+        setFormData(prevState => ({
+            ...prevState,
+            company: {
+                ...prevState.address,
+                [name]: 'default'
+                }
+            }));
     };
 
     const handleSignup = async (e) => {
         e.preventDefault();
         
+        // if (!formData.rememberMe) {
+        //     alert('Please check the "User aggrement" checkbox before attempting to log in.');
+        //     return;
+        //     }
+
         try {
             // Make a POST request to the signup endpoint
             const response = await axios.post(`http://localhost:5000/app/user/signup`, formData);

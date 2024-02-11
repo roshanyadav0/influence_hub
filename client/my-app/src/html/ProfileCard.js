@@ -11,10 +11,11 @@ function ProfileCard ({ user }) {
             <div className="influencercard">
                 <div id="info">
                     <h2>{user.username}</h2>
-                    <p>Email: {user.email}</p>
-                    <p>Location: {user.city}</p>
-                    <p>Description: {user.description}</p>
-                    <p>Role: {user.role}</p>
+                    <p>{user.email}</p>
+                    <p>{user.address.country}</p>
+                    <p>{user.description}</p>
+                    <p>{user.role}</p>
+                    <p>{user.language}</p>
                     </div>
                     <div>
                         <img onClick={()=>navigate(`/profile/?username=${user.username}`)} src={user.profilephoto} alt='error'></img>

@@ -11,10 +11,33 @@ function Login() {
     const navigate=new useNavigate();
 
     
-    const [formData, setFormData] = useState({
-        username: '',
-        password: '',
-        rememberMe: false,
+    // const [formData, setFormData] = useState({
+    //     username: '',
+    //     password: '',
+    //     rememberMe: false,
+    //     });
+        const [formData, setFormData] = useState({
+            profilephoto:'',
+            username:'',
+            email:'',
+            password:'',
+            firstName: '',
+            lastName: '',
+            role: 'admin',
+            address: {
+                section: '',
+                city: '',
+                postalCode: '',
+                state: '',
+                country: 'default',
+            },
+            company: {
+                companyName: '',
+                timezone: '',
+                location: 'default',
+            },
+            languages: [],
+            rememberMe: false,
         });
         
 
@@ -25,6 +48,21 @@ function Login() {
             ...prevData,
             [name]: type === 'checkbox' ? checked : value,
             }));
+            setFormData(prevState => ({
+                ...prevState,
+                address: {
+                    ...prevState.address,
+                    [name]: 'default'
+                    }
+                }));
+                
+            setFormData(prevState => ({
+                ...prevState,
+                company: {
+                    ...prevState.address,
+                    [name]: 'default'
+                    }
+                }));
         };
 
         const handleSubmit = async (event) => {

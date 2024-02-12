@@ -35,7 +35,7 @@ function Influencer() {
                 console.error('Error fetching users:', error);
             }
         };
-
+        console.log("domain",domain),
         fetchUsers();
     }, []);
 

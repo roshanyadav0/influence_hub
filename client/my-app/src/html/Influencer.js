@@ -35,10 +35,10 @@ function Influencer() {
                 console.error('Error fetching users:', error);
             }
         };
-        console.log("domain",domain),
         fetchUsers();
     }, []);
 
+    console.log("domain",domain);
 
     return (
     <div>
